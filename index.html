@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlock 175 AI Tools - ₹19</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#050816;
+color:#fff;
+}
+
+.hero{
+
+padding:60px 20px;
+text-align:center;
+
+background:
+linear-gradient(135deg,#111827,#050816);
+
+}
+
+.badge{
+
+display:inline-block;
+padding:8px 18px;
+background:#ff4545;
+border-radius:50px;
+font-size:14px;
+font-weight:700;
+margin-bottom:25px;
+
+animation:pulse 1.2s infinite;
+
+}
+
+@keyframes pulse{
+
+50%{
+transform:scale(1.08);
+}
+
+}
+
+h1{
+
+font-size:48px;
+font-weight:800;
+line-height:1.2;
+
+}
+
+.highlight{
+
+color:#00f7ff;
+
+}
+
+.subtitle{
+
+margin:25px auto;
+max-width:700px;
+font-size:20px;
+opacity:.9;
+
+}
+
+.price{
+
+margin-top:25px;
+font-size:50px;
+font-weight:800;
+color:#00ff88;
+
+}
+
+.old{
+
+text-decoration:line-through;
+font-size:26px;
+color:#999;
+margin-right:15px;
+
+}
+
+.timer{
+
+margin-top:20px;
+font-size:18px;
+color:#ffb700;
+font-weight:bold;
+
+}
+
+.cta{
+
+margin-top:40px;
+
+}
+
+.cta form{
+
+display:inline-block;
+
+}
+
+.section{
+
+padding:60px 20px;
+max-width:1200px;
+margin:auto;
+
+}
+
+.grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+
+}
+
+.card{
+
+background:#111827;
+padding:30px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,.08);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.card h3{
+
+margin-bottom:12px;
+color:#00f7ff;
+
+}
+
+.review{
+
+background:#0b1225;
+padding:25px;
+border-radius:18px;
+
+}
+
+.review h4{
+
+color:#FFD700;
+
+}
+
+.sticky{
+
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#000;
+padding:12px;
+text-align:center;
+box-shadow:0 -5px 20px rgba(0,0,0,.4);
+
+}
+
+.sticky form{
+
+display:inline-block;
+
+}
+
+footer{
+
+padding:40px;
+text-align:center;
+opacity:.6;
+
+}
+
+.section-title{ text-align:center; margin-bottom:14px; font-size:36px; }
+.section-copy{ max-width:680px; margin:0 auto 38px; text-align:center; color:#b8c0d4; }
+.benefit-card{ background:linear-gradient(145deg,#132238,#0b1225); }
+.benefit-number{ display:block; color:#00ff88; font-size:13px; font-weight:700; margin-bottom:28px; }
+.preview-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:25px; }
+.pdf-preview{ min-height:310px; padding:24px; background:#f7f8fc; color:#111827; border-radius:8px; box-shadow:12px 12px 0 rgba(0,247,255,.12); }
+.pdf-preview:nth-child(2){ transform:translateY(15px); }
+.preview-meta{ display:flex; justify-content:space-between; padding-bottom:14px; border-bottom:1px solid #c7cfda; font-size:11px; font-weight:700; letter-spacing:.08em; }
+.pdf-preview h3{ margin:28px 0 22px; font-size:28px; line-height:1.1; color:#111827; }
+.pdf-preview ul{ margin:0; padding:0; list-style:none; color:#526074; font-size:14px; }
+.pdf-preview li{ padding:9px 0; border-bottom:1px solid #d9dfe7; }
+.pdf-preview li:before{ content:'→'; color:#008e96; margin-right:9px; }
+.trust-badge{ display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:9px 14px; border:1px solid rgba(0,255,136,.45); border-radius:50px; color:#bfffd9; font-size:13px; }
+.trust-badge strong{ color:#00ff88; }
+.faq{ max-width:820px; margin:auto; border-top:1px solid rgba(255,255,255,.15); }
+.faq details{ border-bottom:1px solid rgba(255,255,255,.15); }
+.faq summary{ position:relative; cursor:pointer; padding:21px 42px 21px 0; font-weight:700; list-style:none; }
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary:after{ content:'+'; position:absolute; right:4px; top:13px; color:#00f7ff; font-size:27px; font-weight:400; }
+.faq details[open] summary:after{ content:'−'; }
+.faq details p{ max-width:650px; padding-bottom:22px; color:#b8c0d4; }
+.review-notice{ max-width:760px; margin:auto; padding:30px; border:1px dashed rgba(255,255,255,.3); border-radius:8px; text-align:center; color:#b8c0d4; }
+.review-notice h3{ margin-bottom:10px; color:#00f7ff; }
+.exit-modal{ display:none; position:fixed; inset:0; z-index:20; align-items:center; justify-content:center; padding:20px; background:rgba(5,8,22,.82); }
+.exit-modal.is-visible{ display:flex; }
+.exit-card{ position:relative; max-width:440px; padding:38px; background:#111827; border:1px solid rgba(0,247,255,.35); border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,.45); text-align:center; }
+.close-modal{ position:absolute; top:10px; right:13px; border:0; background:transparent; color:#fff; font-size:27px; cursor:pointer; }
+.sticky a{ display:inline-block; padding:12px 22px; background:#00ff88; border-radius:6px; color:#06150e; font-weight:800; text-decoration:none; }
+
+@media(max-width:700px){
+h1{font-size:37px;}
+.hero{padding:42px 18px 105px;}
+.subtitle{font-size:17px;}
+.section{padding:50px 18px;}
+.section-title{font-size:30px;}
+.price{font-size:43px;}
+.preview-grid{grid-template-columns:1fr;}
+.pdf-preview:nth-child(2){transform:none;}
+.sticky{padding:10px 12px;}
+.sticky div{display:none;}
+.sticky a{width:100%;}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section class="hero">
+
+<div class="badge">
+175+ AI TOOLS PDF • ₹19 ONE-TIME PAYMENT
+</div>
+
+<h1>
+
+Master <span class="highlight">175+ AI Tools</span><br>
+
+Save Hundreds of Hours Every Month
+
+</h1>
+
+<p class="subtitle">
+
+Discover the exact AI tools professionals use for
+Content Creation,
+Coding,
+Design,
+Business,
+Automation,
+Marketing,
+Video Editing,
+Productivity
+and much more.
+
+</p>
+
+<div class="price">
+
+<span class="old">₹499</span>
+
+₹19
+
+</div>
+
+<div class="timer">Instant digital access after payment</div>
+
+<div class="cta">
+
+<form>
+<script src="https://checkout.razorpay.com/v1/payment-button.js"
+data-payment_button_id="pl_TK1JxvmtxmSMzt"
+async>
+</script>
+</form>
+
+</div>
+
+<div class="trust-badge"><strong>✓</strong> 100% Secure Payment via Razorpay</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">Stop searching. Start using.</h2>
+
+<p class="section-copy">
+This PDF gives you a single place to find practical AI tools by the work you need to get done, so you can spend less time comparing lists and more time making progress.
+</p>
+
+<div class="grid">
+
+<div class="card benefit-card">
+<span class="benefit-number">01</span>
+<h3>Save research time</h3>
+<p>Find useful starting points without opening dozens of scattered tool directories.</p>
+</div>
+
+<div class="card benefit-card">
+<span class="benefit-number">02</span>
+<h3>Choose by task</h3>
+<p>Browse categories built around real work: writing, design, code, marketing, and more.</p>
+</div>
+
+<div class="card benefit-card">
+<span class="benefit-number">03</span>
+<h3>Keep a useful reference</h3>
+<p>Return to one compact PDF whenever a project calls for a new tool.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">
+
+What's In The PDF
+
+</h2>
+
+<p class="section-copy">A categorized directory of 175+ AI tools with direct access links, designed to help you discover options across the work you already do.</p>
+
+<div class="grid">
+
+<div class="card">
+<h3>175+ AI Tools</h3>
+<p>Carefully categorized with direct access links.</p>
+</div>
+
+<div class="card">
+<h3>Lifetime Access</h3>
+<p>Pay once and use forever.</p>
+</div>
+
+<div class="card">
+<h3>Instant Download</h3>
+<p>Receive your PDF immediately after payment.</p>
+</div>
+
+<div class="card">
+<h3>Organized Collection</h3>
+<p>Categories designed to make tool discovery easier.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">
+
+Perfect For
+
+</h2>
+
+<div class="grid">
+
+<div class="card">Students</div>
+<div class="card">Freelancers</div>
+<div class="card">Business Owners</div>
+<div class="card">Content Creators</div>
+<div class="card">Designers</div>
+<div class="card">Developers</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">
+
+Why Use This PDF?
+
+</h2>
+
+<div class="grid">
+
+<div class="card">
+
+🚀 Spend less time searching for tools
+
+</div>
+
+<div class="card">
+
+💡 Explore options across common workflows
+
+</div>
+
+<div class="card">
+
+⚡ Keep a useful tool reference nearby
+
+</div>
+
+<div class="card">
+
+🎯 Find tools by the task you need to do
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">What's Inside The PDF?</h2>
+
+<p class="section-copy">Representative page previews show how the PDF is organized. Replace these with actual PDF screenshots before publishing for the strongest product proof.</p>
+
+<div class="preview-grid">
+
+<article class="pdf-preview">
+<div class="preview-meta"><span>AI TOOLS INDEX</span><span>SECTION 01</span></div>
+<h3>Write &amp; Research</h3>
+<ul><li>Writing assistants</li><li>Research tools</li><li>Meeting helpers</li><li>Presentation tools</li></ul>
+</article>
+
+<article class="pdf-preview">
+<div class="preview-meta"><span>AI TOOLS INDEX</span><span>SECTION 02</span></div>
+<h3>Build &amp; Automate</h3>
+<ul><li>Code assistants</li><li>No-code builders</li><li>Workflow automation</li><li>Data tools</li></ul>
+</article>
+
+<article class="pdf-preview">
+<div class="preview-meta"><span>AI TOOLS INDEX</span><span>SECTION 03</span></div>
+<h3>Create &amp; Design</h3>
+<ul><li>Image generation</li><li>Design workflows</li><li>Video editing</li><li>Audio tools</li></ul>
+</article>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">Questions, Answered</h2>
+
+<div class="faq">
+<details>
+<summary>What do I receive after payment?</summary>
+<p>You receive the digital AI tools PDF. It is intended to be available immediately after a successful payment.</p>
+</details>
+<details>
+<summary>Is this a subscription?</summary>
+<p>No. The listed ₹19 price is a one-time payment for the PDF. This page does not describe a recurring subscription.</p>
+</details>
+<details>
+<summary>What kinds of tools are included?</summary>
+<p>The directory covers content creation, coding, design, business, automation, marketing, video editing, productivity, and related workflows.</p>
+</details>
+<details>
+<summary>Can I open the PDF on my phone?</summary>
+<p>Yes. PDF files can be opened on common mobile, tablet, and desktop PDF readers.</p>
+</details>
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="review-notice">
+<h3>Customer reviews belong here.</h3>
+<p>This page intentionally does not use sample testimonials or invented download counts. Add genuine, permissioned customer feedback here before publishing.</p>
+</div>
+
+</section>
+
+<footer>Copyright © 2026 · Digital product · Secure checkout via Razorpay</footer>
+
+<div class="sticky">
+
+<div style="margin-bottom:10px;font-size:15px;font-weight:bold;">175+ AI tools · ₹19 one-time payment</div>
+<a href="#top">Get the PDF</a>
+
+</div>
+
+<div class="exit-modal" id="exitModal" role="dialog" aria-modal="true" aria-labelledby="exitTitle" aria-hidden="true">
+<div class="exit-card">
+<button class="close-modal" id="closeModal" type="button" aria-label="Close">×</button>
+<h2 id="exitTitle">Need a simpler place to start?</h2>
+<p class="section-copy">Keep the AI tool directory handy for your next project. Your secure checkout is ready when you are.</p>
+<a class="trust-badge" href="#top">View secure checkout</a>
+</div>
+</div>
+
+<script>
+const exitModal = document.getElementById('exitModal');
+const closeModal = document.getElementById('closeModal');
+let exitShown = false;
+
+function closeExitModal() {
+	exitModal.classList.remove('is-visible');
+	exitModal.setAttribute('aria-hidden', 'true');
+}
+
+document.addEventListener('mouseout', (event) => {
+	if (!exitShown && window.innerWidth > 700 && event.clientY <= 0 && !event.relatedTarget) {
+		exitShown = true;
+		exitModal.classList.add('is-visible');
+		exitModal.setAttribute('aria-hidden', 'false');
+		closeModal.focus();
+	}
+});
+
+closeModal.addEventListener('click', closeExitModal);
+exitModal.addEventListener('click', (event) => { if (event.target === exitModal) closeExitModal(); });
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeExitModal(); });
+</script>
+
+</body>
+</html>
