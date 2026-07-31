@@ -10,6 +10,7 @@ const port = Number(process.env.PORT || 3000);
 const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
 const expectedPaymentAmount = Number(process.env.RAZORPAY_EXPECTED_AMOUNT || 1900);
 const publicBaseUrl = (process.env.PUBLIC_BASE_URL || `http://localhost:${port}`).replace(/\/$/, '');
+const fulfillmentWebhookUrl = process.env.FULFILLMENT_WEBHOOK_URL || '';
 const rootDirectory = __dirname;
 const purchaseFile = path.join(rootDirectory, 'data', 'purchases.json');
 const products = {
@@ -87,7 +88,10 @@ function createPurchase(payment) {
   const purchases = readPurchases();
   if (purchases[payment.id]) return { purchase: purchases[payment.id], isNew: false };
 
-  const token = crypto.randomBytes(32).toString('hex');
+  const downloads = Object.fromEntries(Object.keys(products).map((productId) => [productId, {
+    token: crypto.randomBytes(32).toString('hex'),
+    usedAt: null
+  }]));
   const purchase = {
     paymentId: payment.id,
     orderId: payment.order_id || null,
@@ -97,7 +101,9 @@ function createPurchase(payment) {
     currency: payment.currency,
     status: payment.status,
     createdAt: new Date().toISOString(),
-    token
+    deliveryToken: crypto.randomBytes(32).toString('hex'),
+    deliveryClaimedAt: null,
+    downloads
   };
 
   purchases[payment.id] = purchase;
@@ -105,11 +111,31 @@ function createPurchase(payment) {
   return { purchase, isNew: true };
 }
 
-function getDownloads(token) {
-  return Object.entries(products).map(([productId, product]) => ({
-    name: product.downloadName,
-    url: `${publicBaseUrl}/downloads/${productId}?token=${token}`
-  }));
+function getDeliveryUrl(purchase) {
+  return `${publicBaseUrl}/delivery?token=${purchase.deliveryToken}`;
+}
+
+async function notifyFulfillment(purchase) {
+  const deliveryUrl = getDeliveryUrl(purchase);
+  console.info(`Fulfillment created for ${purchase.paymentId}`, { email: purchase.email, deliveryUrl });
+
+  if (!fulfillmentWebhookUrl) return;
+
+  try {
+    const result = await fetch(fulfillmentWebhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        paymentId: purchase.paymentId,
+        email: purchase.email,
+        contact: purchase.contact,
+        deliveryUrl
+      })
+    });
+    if (!result.ok) console.error(`Fulfillment webhook failed: HTTP ${result.status}`);
+  } catch (error) {
+    console.error('Fulfillment webhook failed:', error.message);
+  }
 }
 
 async function handleWebhook(request, response) {
@@ -133,20 +159,39 @@ async function handleWebhook(request, response) {
   }
 
   const { purchase, isNew } = createPurchase(payment);
-  const downloads = getDownloads(purchase.token);
 
-  if (isNew) {
-    console.info(`Fulfillment created for ${payment.id}`, { email: purchase.email, downloads });
-    // Send `downloads` to purchase.email here using your chosen transactional email provider.
-  }
+  if (isNew) await notifyFulfillment(purchase);
 
   return sendJson(response, 200, { received: true });
 }
 
-function authorizeDownload(token) {
-  if (!token) return false;
+function findPurchaseByDeliveryToken(token) {
+  if (!token) return null;
   const purchases = readPurchases();
-  return Object.values(purchases).some((purchase) => purchase.token === token && purchase.status === 'captured');
+  return Object.values(purchases).find((purchase) => purchase.deliveryToken === token && purchase.status === 'captured') || null;
+}
+
+function findPurchaseByDownloadToken(productId, token) {
+  if (!token) return null;
+  const purchases = readPurchases();
+  return Object.values(purchases).find((purchase) => purchase.status === 'captured' && purchase.downloads?.[productId]?.token === token) || null;
+}
+
+function renderPage(response, title, content, statusCode = 200) {
+  response.writeHead(statusCode, { 'Content-Type': 'text/html; charset=utf-8' });
+  response.end(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>body{margin:0;background:#050816;color:#fff;font-family:system-ui,sans-serif;display:grid;min-height:100vh;place-items:center;padding:24px}.card{max-width:580px;background:#111827;border:1px solid #24304a;border-radius:12px;padding:34px;text-align:center}h1{margin-top:0}p{color:#c8d1e0;line-height:1.6}.button{display:inline-block;margin:8px;padding:13px 18px;border:0;border-radius:6px;background:#00ff88;color:#07150f;font-weight:800;text-decoration:none;cursor:pointer}small{display:block;margin-top:18px;color:#9faabd}</style></head><body><main class="card">${content}</main></body></html>`);
+}
+
+function claimDelivery(token) {
+  const purchases = readPurchases();
+  const entry = Object.entries(purchases).find(([, purchase]) => purchase.deliveryToken === token && purchase.status === 'captured');
+  if (!entry) return null;
+  const [paymentId, purchase] = entry;
+  if (purchase.deliveryClaimedAt) return { alreadyClaimed: true };
+  purchase.deliveryClaimedAt = new Date().toISOString();
+  purchases[paymentId] = purchase;
+  writePurchases(purchases);
+  return { purchase };
 }
 
 const server = http.createServer(async (request, response) => {
@@ -155,11 +200,30 @@ const server = http.createServer(async (request, response) => {
   try {
     if (request.method === 'POST' && requestUrl.pathname === '/webhook') return handleWebhook(request, response);
 
+    if (request.method === 'GET' && requestUrl.pathname === '/delivery') {
+      const purchase = findPurchaseByDeliveryToken(requestUrl.searchParams.get('token'));
+      if (!purchase || purchase.deliveryClaimedAt) return renderPage(response, 'Link unavailable', '<h1>Link unavailable</h1><p>This delivery link has already been used or is invalid.</p>', 410);
+      const token = requestUrl.searchParams.get('token');
+      return renderPage(response, 'Your PDF bundle is ready', `<h1>Your PDF bundle is ready</h1><p>Use this one-time link to unlock your two downloads. Each PDF download can be used once.</p><form method="post" action="/delivery/claim?token=${encodeURIComponent(token)}"><button class="button" type="submit">Unlock my PDFs</button></form><small>Verified payment required</small>`);
+    }
+
+    if (request.method === 'POST' && requestUrl.pathname === '/delivery/claim') {
+      const result = claimDelivery(requestUrl.searchParams.get('token'));
+      if (!result || result.alreadyClaimed) return renderPage(response, 'Link unavailable', '<h1>Link unavailable</h1><p>This delivery link has already been used or is invalid.</p>', 410);
+      const links = Object.entries(products).map(([productId, product]) => `<a class="button" href="/downloads/${productId}?token=${result.purchase.downloads[productId].token}">${product.downloadName}</a>`).join('');
+      return renderPage(response, 'Download your PDFs', `<h1>Download your PDFs</h1><p>Each download button works once. Save the files after downloading.</p>${links}`);
+    }
+
     if (request.method === 'GET' && requestUrl.pathname.startsWith('/downloads/')) {
       const productId = requestUrl.pathname.split('/').pop();
       const product = products[productId];
       if (!product) return sendJson(response, 404, { error: 'Unknown product' });
-      if (!authorizeDownload(requestUrl.searchParams.get('token'))) return sendJson(response, 403, { error: 'A verified payment is required' });
+      const purchase = findPurchaseByDownloadToken(productId, requestUrl.searchParams.get('token'));
+      if (!purchase || purchase.downloads[productId].usedAt) return sendJson(response, 403, { error: 'This one-time download link is unavailable' });
+      const purchases = readPurchases();
+      purchase.downloads[productId].usedAt = new Date().toISOString();
+      purchases[purchase.paymentId] = purchase;
+      writePurchases(purchases);
       return serveFile(response, product.filename, 'application/pdf', product.downloadName);
     }
 

@@ -21,6 +21,8 @@ https://your-domain.example/webhook
 
 Subscribe to `payment.captured` and copy the dashboard-generated webhook secret to `RAZORPAY_WEBHOOK_SECRET`. Razorpay must be able to reach the URL over public HTTPS; `localhost` will not work in production. The server also accepts only captured INR payments matching `RAZORPAY_EXPECTED_AMOUNT` (₹19 is `1900` paise by default).
 
-On each verified `payment.captured` event, the server makes an idempotent fulfillment record in `data/purchases.json` and generates private links for both PDFs. The links are written to the server log. Connect the marked email-provider hook in `server.js` to automatically email those links to the payer.
+On each verified `payment.captured` event, the server makes an idempotent fulfillment record in `data/purchases.json` and generates one private delivery URL. Opening it and selecting **Unlock my PDFs** consumes that delivery URL, then reveals one download URL for each PDF. Each PDF URL is consumed as soon as it starts downloading.
+
+To automatically share the delivery URL with the buyer, add a Make, n8n, or transactional-email endpoint to `FULFILLMENT_WEBHOOK_URL`. The server sends that endpoint a JSON body containing `paymentId`, `email`, `contact`, and `deliveryUrl`. Without this optional endpoint, the delivery URL is safely written to the server log for manual sending.
 
 Do not commit `.env` or `data/purchases.json`.
